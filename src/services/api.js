@@ -11,9 +11,11 @@
  *   fetchAdminChatLogs — admin paginated monitor
  */
 
-// Local dev: VITE_API_URL=/api — Vite proxy forwards to backend (vite.config.js).
-// Vercel + Render: set VITE_API_URL=https://your-backend.onrender.com in Vercel env vars, then redeploy.
-const API_BASE = import.meta.env.VITE_API_URL ?? '/api'
+// Local dev: /api → Vite proxy → localhost:8000 (vite.config.js).
+// Production (Vercel): /api → vercel.json rewrite → Render backend (no CORS issues).
+const API_BASE = import.meta.env.DEV
+  ? (import.meta.env.VITE_API_URL ?? '/api')
+  : '/api'
 
 function getToken() {
   return localStorage.getItem('hyundai_auth_token')
@@ -62,7 +64,9 @@ async function request(path, options = {}) {
     })
   } catch {
     throw new Error(
-      'Cannot reach the backend server. Run start_backend.bat (or: cd backend && python -m uvicorn app:app --port 8000), then try again.'
+      import.meta.env.DEV
+        ? 'Cannot reach the backend server. Run start_backend.bat (or: cd backend && python -m uvicorn app:app --port 8000), then try again.'
+        : 'Cannot reach the backend server. The Render backend may be waking up (free tier takes ~1 min). Open https://hyundai-intellidrive.onrender.com/health in a new tab, wait until it loads, then try again.'
     )
   }
 
