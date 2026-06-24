@@ -96,13 +96,19 @@ async function request(path, options = {}) {
   return data
 }
 
-export async function sendChatMessage(message, usedSuggestionIds = [], sessionId = null) {
+export async function sendChatMessage(
+  message,
+  usedSuggestionIds = [],
+  sessionId = null,
+  clientContext = null,
+) {
   return request('/chat', {
     method: 'POST',
     body: JSON.stringify({
       message,
       used_suggestion_ids: usedSuggestionIds,
       session_id: sessionId,
+      client_context: clientContext,
     }),
   })
 }
