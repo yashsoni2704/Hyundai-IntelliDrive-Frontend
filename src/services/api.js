@@ -11,7 +11,8 @@
  *   fetchAdminChatLogs — admin paginated monitor
  */
 
-// Dev: Vite proxy /api → backend. Production (Render): VITE_API_URL="" → same-origin /chat, /auth, etc.
+// Local dev: VITE_API_URL=/api — Vite proxy forwards to backend (vite.config.js).
+// Vercel + Render: set VITE_API_URL=https://your-backend.onrender.com in Vercel env vars, then redeploy.
 const API_BASE = import.meta.env.VITE_API_URL ?? '/api'
 
 function getToken() {
