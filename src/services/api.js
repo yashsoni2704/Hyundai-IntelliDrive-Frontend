@@ -27,6 +27,9 @@ function authHeaders() {
 }
 
 function parseApiError(data, status) {
+  if (status === 404 && typeof data.detail === 'string') {
+    return data.detail
+  }
   if (status === 404) {
     return 'API route not found. Restart the backend: cd backend && python -m uvicorn app:app --port 8000'
   }
